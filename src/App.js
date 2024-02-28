@@ -2,38 +2,6 @@
 import './App.css';
 import {useState} from "react";
 
-
-/*
-1. function Name(){return ()}만들기  함수이름은 대문자로 시작.
-2. return()에 html 담기
-3. <함수명></함수명>'
-
-컴포넌트 만들기 좋은 상황
-반복적 html 축약 시
-큰 페이지
-자주 변경되는 UI
-
-단점
-state  가져다 쓸 때 문제가 생긴다
-function  App() 안에서만 정의되어 있기 때문..
-
-컴포넌트 만드는 문법 1
-function Name(){
-return ()
-}
-컴포넌트 만드는 문법 2
-const Modal =  ()=>{
-  return()
-}
-*/
-
-/* 동적인 UI만드는 STEP*/
-/*
-STEP1. html css 로 미리 디자인 완성
-STEP2. UI의 현재 상태를 state로 저장
-STEP3. state에 따라 UI가 어떻게 보일지 작성
-*/
-
 function Modal(){
     return(
         <div className="modal">
@@ -46,9 +14,25 @@ function Modal(){
 
 function App() {
     const [title,setTitle] = useState(['youth','행복을 빌어줘','21세기의 어떤 날']) ;
-    const [like,setLike] = useState(0);
+    const [like,setLike] = useState([0,0,0]);
 
-    const [modal,setModal] = useState(false); //STEP2
+    const [modal,setModal] = useState(false);
+
+    /* map */
+    // array의 자료 개수만큼  함수안의 코드를 실행해준다.
+    // 함수의 첫 번째 파라미터는 array안에 있던 자료 각각.
+    // return을 하면 배열을 담아줌. ( array개수만큼)
+
+    //함수의 두 번째 파라미터는  반복문이 돌 때마다 0부터 1씩 증가하는 정수
+
+    // 반복문으로 html을 생성하면 각각에 key={고유숫자} 추가해주어야한다.
+/*
+
+    [1,2,3].map(function(a){
+        console.log(a);
+        return '12321'
+    })
+*/
 
     function myfunc(){
         setLike(like+1);
@@ -56,14 +40,11 @@ function App() {
 
     function changeTitle(){
         const arr = [...title]
-        arr[0] = "여자 코트 추천" //원본이 아니라 copy본을
+        arr[0] = "여자 코트 추천"
         setTitle(arr);
     }
 
     function sortList(){
-        /*const arr = [...title];
-        arr.sort();
-        setTitle(arr)*/
         const arr = [...(title.sort())];
         setTitle(arr)
     }
@@ -77,7 +58,32 @@ function App() {
             <div className="black-nav">
                 <h4>React blog🥰</h4>
             </div>
-            <div className="list">
+
+            {/* 중괄호 안에서는 if 나 for 이런거 쓸수 없음  if는 삼항연산자로, for 는 map으로 대체해보자 */}
+            {
+               /* [1,2,3].map(function(index){
+                    return( <div>안녕</div>
+
+                    )
+                })*/
+
+                /*<div>안녕</div><div>안녕</div><div>안녕</div> 세개가 남는것*/
+            }
+
+            {
+                title.map(function(val,i){
+                    return(
+                        <div className="list" key={i}>
+                            <h4 onClick={handleModal}>{val} <span onClick={myfunc}>👍🏻</span> {like[i]}</h4>
+                            {/* {val} 대신에   map의 콜백함수의 두번재파라미터를 활용해서 {title[i]}  로 작성해도 됨*/}
+                            <p>2월 17일 발행</p>
+                        </div>
+                    )
+                })
+
+            }
+
+        {/*    <div className="list">
                 <h4>{title[0]} <span onClick={myfunc}>👍🏻</span> {like}</h4>
                 <p>2월 17일 발행</p>
             </div>
@@ -88,11 +94,10 @@ function App() {
             <div className="list">
                 <h4 onClick={handleModal}>{title[2]}</h4>
                 <p>2월 17일 발행</p>
-            </div>
+            </div>*/}
             <button onClick={changeTitle}>변경</button>
             <button onClick={sortList}>정렬</button>
 
-            {/*STEP3*/}
             {
                 modal ? <Modal/> : null
             }
