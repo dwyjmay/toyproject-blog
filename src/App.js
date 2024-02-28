@@ -19,9 +19,11 @@ function App() {
     }
 
     function sortList(){
-        const arr = [...title];
-        const sortedArr = arr.sort();
-        setTitle(sortedArr)
+        /*const arr = [...title];
+        arr.sort();
+        setTitle(arr)*/
+        const arr = [...(title.sort())];
+        setTitle(arr)
     }
 
     return (
