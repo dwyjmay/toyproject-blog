@@ -33,9 +33,10 @@ function App() {
         return '12321'
     })
 */
-
-    function myfunc(){
-        setLike(like+1);
+    function handleLike(index){
+        const likecopy = [...like];
+        likecopy[index] +=1;
+        setLike(likecopy)
     }
 
     function changeTitle(){
@@ -74,7 +75,7 @@ function App() {
                 title.map(function(val,i){
                     return(
                         <div className="list" key={i}>
-                            <h4 onClick={handleModal}>{val} <span onClick={myfunc}>👍🏻</span> {like[i]}</h4>
+                            <h4 onClick={handleModal}>{val} <span onClick={()=>{handleLike(i);}}>👍🏻</span> {like[i]}</h4>
                             {/* {val} 대신에   map의 콜백함수의 두번재파라미터를 활용해서 {title[i]}  로 작성해도 됨*/}
                             <p>2월 17일 발행</p>
                         </div>
@@ -83,23 +84,11 @@ function App() {
 
             }
 
-        {/*    <div className="list">
-                <h4>{title[0]} <span onClick={myfunc}>👍🏻</span> {like}</h4>
-                <p>2월 17일 발행</p>
-            </div>
-            <div className="list">
-                <h4>{title[1]}</h4>
-                <p>2월 17일 발행</p>
-            </div>
-            <div className="list">
-                <h4 onClick={handleModal}>{title[2]}</h4>
-                <p>2월 17일 발행</p>
-            </div>*/}
             <button onClick={changeTitle}>변경</button>
             <button onClick={sortList}>정렬</button>
 
             {
-                modal ? <Modal/> : null
+                modal ? <Modal title={title} handleTitle={changeTitle}/> : null
             }
         </div>
     );
