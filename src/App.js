@@ -2,12 +2,14 @@
 import './App.css';
 import {useState} from "react";
 
-function Modal(){
+function Modal(props){
+    /* props 전송하기 2단계*/
     return(
         <div className="modal">
-            <h4>제목</h4>
+            <h4>{props.title}</h4>
             <p>날짜</p>
             <p>내용</p>
+            <button onClick={props.handleTitle}>제목 수정</button>
         </div>
     )
 }
@@ -18,21 +20,15 @@ function App() {
 
     const [modal,setModal] = useState(false);
 
-    /* map */
-    // array의 자료 개수만큼  함수안의 코드를 실행해준다.
-    // 함수의 첫 번째 파라미터는 array안에 있던 자료 각각.
-    // return을 하면 배열을 담아줌. ( array개수만큼)
+    /* props 전송하기 (부모컴포넌트 -> 자식컴포넌트) */
+    /*
+    props 라는 문법으로 부모 컴포넌트가 갖고있는 state를 자식 컴포넌트에게 넘겨 줄 수 있다.
+    (자식 -> 부모, 형제간은 불가능)
 
-    //함수의 두 번째 파라미터는  반복문이 돌 때마다 0부터 1씩 증가하는 정수
-
-    // 반복문으로 html을 생성하면 각각에 key={고유숫자} 추가해주어야한다.
-/*
-
-    [1,2,3].map(function(a){
-        console.log(a);
-        return '12321'
-    })
-*/
+    props 전송하기 단계
+    1. <자식 컴포넌트 작명 = {state이름}/>         ( 물론 state말고 "문자열", 함수 [by함수명] 등 다양하게  전송 가능)
+    2. 자식 컴포너트 function 부분에  파라미터로  (일반적으로)props , 사용은 props.작명
+    */
     function handleLike(index){
         const likecopy = [...like];
         likecopy[index] +=1;
@@ -41,7 +37,7 @@ function App() {
 
     function changeTitle(){
         const arr = [...title]
-        arr[0] = "여자 코트 추천"
+        arr[0] = "misfit"
         setTitle(arr);
     }
 
@@ -60,17 +56,6 @@ function App() {
                 <h4>React blog🥰</h4>
             </div>
 
-            {/* 중괄호 안에서는 if 나 for 이런거 쓸수 없음  if는 삼항연산자로, for 는 map으로 대체해보자 */}
-            {
-               /* [1,2,3].map(function(index){
-                    return( <div>안녕</div>
-
-                    )
-                })*/
-
-                /*<div>안녕</div><div>안녕</div><div>안녕</div> 세개가 남는것*/
-            }
-
             {
                 title.map(function(val,i){
                     return(
@@ -88,6 +73,7 @@ function App() {
             <button onClick={sortList}>정렬</button>
 
             {
+                /* props 전송하기 1단계.*/
                 modal ? <Modal title={title} handleTitle={changeTitle}/> : null
             }
         </div>
