@@ -24,6 +24,8 @@ function App() {
 
     const [input, setInput] = useState('');
 
+    const [launchDate , setLaunchDate]=useState([{month : 3,date:4},{month : 2,date:16},{month : 1,date:13}]);
+
     /* props 전송하기 (부모컴포넌트 -> 자식컴포넌트) */
     /*
     props 라는 문법으로 부모 컴포넌트가 갖고있는 state를 자식 컴포넌트에게 넘겨 줄 수 있다.
@@ -70,16 +72,32 @@ function App() {
                         <div className="list" key={i}>
                             <h4 onClick={()=>{handleModal(i)}}>{val} <span onClick={(e)=>{e.stopPropagation();handleLike(i);}}>👍🏻</span> {like[i]}</h4>
                             {/* {val} 대신에   map의 콜백함수의 두번재파라미터를 활용해서 {titles[i]}  로 작성해도 됨*/}
-                            <p>2월 17일 발행</p>
+                            <p>{JSON.stringify(launchDate[i].month)}월 {JSON.stringify(launchDate[i].date)}일 발행</p>
                             <button onClick={()=>{
-                                const titlesUpdate = titles.filter((element,index)=>{
+                                //const titlesUpdate = [...titles].splice(i,1);
+                                //↑ 이렇게 쓰면  titlesUpdate에 splice 범위에 들어가는 애들이 남는다.
+                                const titlesUpdate = [...titles];
+                                titlesUpdate.splice(i,1);
+                                setTitles(titlesUpdate);
+
+                                const likeUpdate =[...like];
+                                likeUpdate.splice(i,1);
+                                setLike(likeUpdate);
+
+                                const dateListUpdate = [...launchDate];
+                                dateListUpdate.splice(i,1);
+                                setLaunchDate(dateListUpdate);
+
+
+                               /* const titlesUpdate = titles.filter((element,index)=>{
                                     return index !== i;
                                 })
                                 const likeUpdate = like.filter((element,index)=>{
                                     return index !==i;
                                 })
                                 setTitles(titlesUpdate)
-                                setLike(likeUpdate);
+                                setLike(likeUpdate);*/
+
                             }}>삭제</button>
                         </div>
                     )
@@ -90,10 +108,20 @@ function App() {
             <div>
                 <input type="text" onChange={(e) => {setInput(e.target.value);console.log(input)}}/>
                 <button onClick={()=>{
-                    const titlesUpdate =  [input,...titles]
-                    const likeUpdate = [0,...like]
-                    setTitles(titlesUpdate);
-                    setLike(likeUpdate)
+                    if(input!==''){
+                        const titlesUpdate =  [input,...titles]
+                        const likeUpdate = [0,...like]
+                        setTitles(titlesUpdate);
+                        setLike(likeUpdate)
+
+                        const date = new Date();
+                        const currentDate = [{month : date.getMonth()+1, date : date.getDate()},...launchDate];
+                        setLaunchDate(currentDate);
+
+
+                    }else{
+                        alert('내용을 입력해주세요.')
+                    }
                 }}>등록</button>
             </div>
             {/*
