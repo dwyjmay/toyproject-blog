@@ -6,7 +6,7 @@ function Modal(props){
     /* props 전송하기 2단계*/
     return(
         <div className="modal">
-            <h4>{props.title}</h4>
+            <h4>{props.titles[props.title]}</h4>
             <p>날짜</p>
             <p>내용</p>
             <button onClick={props.handleTitle}>제목 수정</button>
@@ -15,10 +15,12 @@ function Modal(props){
 }
 
 function App() {
-    const [title,setTitle] = useState(['youth','행복을 빌어줘','21세기의 어떤 날']) ;
+    const [titles,setTitles] = useState(['youth','행복을 빌어줘','21세기의 어떤 날']) ;
     const [like,setLike] = useState([0,0,0]);
 
     const [modal,setModal] = useState(false);
+
+    let [title,setTitle] = useState(0);
 
     /* props 전송하기 (부모컴포넌트 -> 자식컴포넌트) */
     /*
@@ -35,19 +37,23 @@ function App() {
         setLike(likecopy)
     }
 
-    function changeTitle(){
-        const arr = [...title]
+    function changeTitles(){
+        const arr = [...titles]
         arr[0] = "misfit"
-        setTitle(arr);
+        setTitles(arr);
     }
 
     function sortList(){
-        const arr = [...(title.sort())];
-        setTitle(arr)
+        const arr = [...(titles.sort())];
+        setTitles(arr)
     }
 
-    const handleModal = ()=>{
-        setModal(!modal)
+    const handleModal = (index)=>{
+        if(!modal){
+            setModal(!modal)
+        }
+
+        setTitle(index)
     }
 
     return (
@@ -57,11 +63,11 @@ function App() {
             </div>
 
             {
-                title.map(function(val,i){
+                titles.map(function(val,i){
                     return(
                         <div className="list" key={i}>
-                            <h4 onClick={handleModal}>{val} <span onClick={()=>{handleLike(i);}}>👍🏻</span> {like[i]}</h4>
-                            {/* {val} 대신에   map의 콜백함수의 두번재파라미터를 활용해서 {title[i]}  로 작성해도 됨*/}
+                            <h4 onClick={()=>{handleModal(i)}}>{val} <span onClick={()=>{handleLike(i);}}>👍🏻</span> {like[i]}</h4>
+                            {/* {val} 대신에   map의 콜백함수의 두번재파라미터를 활용해서 {titles[i]}  로 작성해도 됨*/}
                             <p>2월 17일 발행</p>
                         </div>
                     )
@@ -69,12 +75,17 @@ function App() {
 
             }
 
-            <button onClick={changeTitle}>변경</button>
+            <button onClick={changeTitles}>변경</button>
             <button onClick={sortList}>정렬</button>
+
+            <br/>
+            <button onClick={()=>{setTitle(0)}}>글제목0</button>
+            <button onClick={()=>{setTitle(1)}}>글제목1</button>
+            <button onClick={()=>{setTitle(2)}}>글제목2</button>
 
             {
                 /* props 전송하기 1단계.*/
-                modal ? <Modal title={title} handleTitle={changeTitle}/> : null
+                modal ? <Modal titles={titles} handleTitle={changeTitles} title={title}/> : null
             }
         </div>
     );
