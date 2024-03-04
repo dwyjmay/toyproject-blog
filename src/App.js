@@ -1,4 +1,4 @@
-/* eslint-disable */ 
+/* eslint-disable */
 import './App.css';
 import {useState} from "react";
 
@@ -20,7 +20,9 @@ function App() {
 
     const [modal,setModal] = useState(false);
 
-    let [title,setTitle] = useState(0);
+    const [title,setTitle] = useState(0);
+
+    const [input, setInput] = useState('');
 
     /* props 전송하기 (부모컴포넌트 -> 자식컴포넌트) */
     /*
@@ -66,22 +68,41 @@ function App() {
                 titles.map(function(val,i){
                     return(
                         <div className="list" key={i}>
-                            <h4 onClick={()=>{handleModal(i)}}>{val} <span onClick={()=>{handleLike(i);}}>👍🏻</span> {like[i]}</h4>
+                            <h4 onClick={()=>{handleModal(i)}}>{val} <span onClick={(e)=>{e.stopPropagation();handleLike(i);}}>👍🏻</span> {like[i]}</h4>
                             {/* {val} 대신에   map의 콜백함수의 두번재파라미터를 활용해서 {titles[i]}  로 작성해도 됨*/}
                             <p>2월 17일 발행</p>
+                            <button onClick={()=>{
+                                const titlesUpdate = titles.filter((element,index)=>{
+                                    return index !== i;
+                                })
+                                const likeUpdate = like.filter((element,index)=>{
+                                    return index !==i;
+                                })
+                                setTitles(titlesUpdate)
+                                setLike(likeUpdate);
+                            }}>삭제</button>
                         </div>
                     )
                 })
 
             }
 
+            <div>
+                <input type="text" onChange={(e) => {setInput(e.target.value);console.log(input)}}/>
+                <button onClick={()=>{
+                    const titlesUpdate =  [input,...titles]
+                    const likeUpdate = [0,...like]
+                    setTitles(titlesUpdate);
+                    setLike(likeUpdate)
+                }}>등록</button>
+            </div>
+            {/*
+                👉🏻 e.stopPropagation(); 이벤트 버블링 방지
+                👉🏻 state변경 함수는 처리하는데 시간이 좀 걸려서,   처음 setInput()이 완료되기 전에 console이 출력되어 빈칸이 나옴
+
+            */}
             <button onClick={changeTitles}>변경</button>
             <button onClick={sortList}>정렬</button>
-
-            <br/>
-            <button onClick={()=>{setTitle(0)}}>글제목0</button>
-            <button onClick={()=>{setTitle(1)}}>글제목1</button>
-            <button onClick={()=>{setTitle(2)}}>글제목2</button>
 
             {
                 /* props 전송하기 1단계.*/
