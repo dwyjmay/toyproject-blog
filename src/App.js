@@ -1,6 +1,7 @@
 /* eslint-disable */
 import './App.css';
 import {useState} from "react";
+import React from 'react';
 
 function Modal(props){
     /* props 전송하기 2단계*/
@@ -12,6 +13,30 @@ function Modal(props){
             <button onClick={props.handleTitle}>제목 수정</button>
         </div>
     )
+}
+
+
+/* class를 이용한 react 문법 */
+class Modal2 extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = { //state 생성
+            name : 'kim',
+            age : 20
+        }
+    }
+    render(){
+        return(
+            <div>안녕&nbsp;{this.state.name}!
+                {/*{this.props}  부모로 부터 받은 props*/}
+                <button onClick={()=>{
+                    this.setState({name : 'Seo'});
+                    // 기존 state를 갈아치워주는 건 아니고! 차이점(변경사항)만 분석해서 수정해줌
+                }}>이름 변경</button>
+
+            </div>
+        )
+    }
 }
 
 function App() {
@@ -65,6 +90,8 @@ function App() {
             <div className="black-nav">
                 <h4>React blog🥰</h4>
             </div>
+
+            <Modal2/>
 
             {
                 titles.map(function(val,i){
